@@ -1,373 +1,267 @@
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  .lc-wrap {
-    font-family: 'DM Sans', sans-serif;
-    min-height: 560px;
-    background: linear-gradient(135deg, #1a0a2e 0%, #2d1054 40%, #1a0a2e 100%);
-    border-radius: 20px;
-    padding: 40px 32px 48px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .stars {
-    position: absolute; inset: 0; pointer-events: none;
-  }
-  .star {
-    position: absolute;
-    width: 2px; height: 2px;
-    background: #fff;
-    border-radius: 50%;
-    opacity: 0;
-    animation: twinkle var(--d, 3s) ease-in-out infinite var(--delay, 0s);
-  }
-  @keyframes twinkle {
-    0%,100% { opacity: 0; transform: scale(0.5); }
-    50% { opacity: var(--op, 0.8); transform: scale(1); }
-  }
-
-  .lc-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 34px;
-    font-weight: 400;
-    color: #f9d4f0;
-    text-align: center;
-    letter-spacing: 0.5px;
-    margin-bottom: 4px;
-    position: relative;
-  }
-  .lc-title em { font-style: italic; color: #ff82c8; }
-
-  .lc-sub {
-    text-align: center;
-    font-size: 13px;
-    color: #b08fc4;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    margin-bottom: 36px;
-    position: relative;
-  }
-
-  .heart-deco {
-    display: flex; align-items: center; justify-content: center;
-    gap: 12px; margin-bottom: 32px; position: relative;
-  }
-  .heart-deco .line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, #b08fc4, transparent); }
-  .heart-icon { font-size: 20px; animation: pulse-heart 1.4s ease-in-out infinite; }
-  @keyframes pulse-heart {
-    0%,100% { transform: scale(1); }
-    50% { transform: scale(1.25); }
-  }
-
-  .input-group {
-    margin-bottom: 20px;
-    position: relative;
-  }
-  .input-label {
-    font-size: 11px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: #c4a6d9;
-    margin-bottom: 8px;
-    display: block;
-    font-weight: 500;
-  }
-  .lc-input {
-    width: 100%;
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 14px;
-    padding: 14px 18px;
-    font-size: 17px;
-    font-family: 'Playfair Display', serif;
-    color: #f0d9fc;
-    outline: none;
-    transition: border-color 0.2s, background 0.2s;
-    letter-spacing: 0.3px;
-  }
-  .lc-input::placeholder { color: #7a5e90; font-style: italic; }
-  .lc-input:focus {
-    border-color: rgba(255,130,200,0.5);
-    background: rgba(255,255,255,0.11);
-  }
-
-  .plus-row {
-    display: flex; align-items: center; justify-content: center;
-    margin: 4px 0 20px; font-size: 22px; color: #ff82c8; opacity: 0.7;
-  }
-
-  .calc-btn {
-    width: 100%;
-    padding: 16px;
-    background: linear-gradient(135deg, #c2185b, #880e4f);
-    border: none;
-    border-radius: 14px;
-    font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    color: #ffe4f3;
-    cursor: pointer;
-    letter-spacing: 0.4px;
-    transition: transform 0.15s, opacity 0.15s, box-shadow 0.15s;
-    margin-top: 4px;
-    box-shadow: 0 4px 24px rgba(194,24,91,0.35);
-    position: relative;
-  }
-  .calc-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(194,24,91,0.5); }
-  .calc-btn:active { transform: translateY(0); }
-
-  .result-area {
-    margin-top: 32px;
-    display: none;
-    animation: fadeUp 0.6s ease forwards;
-  }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .result-names {
-    text-align: center;
-    font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    color: #f0d9fc;
-    margin-bottom: 20px;
-    letter-spacing: 0.3px;
-  }
-  .result-names span { color: #ff82c8; }
-
-  .heart-meter {
-    position: relative;
-    height: 22px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 100px;
-    overflow: hidden;
-    margin-bottom: 12px;
-  }
-  .heart-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #c2185b, #ff82c8, #ff4081);
-    border-radius: 100px;
-    width: 0%;
-    transition: width 1.4s cubic-bezier(0.23,1,0.32,1);
-    position: relative;
-  }
-  .heart-fill::after {
-    content: '';
-    position: absolute;
-    top: 3px; left: 6px; right: 6px; height: 6px;
-    background: rgba(255,255,255,0.25);
-    border-radius: 100px;
-  }
-
-  .pct-display {
-    text-align: center;
-    font-family: 'Playfair Display', serif;
-    font-size: 64px;
-    font-weight: 700;
-    color: #ff82c8;
-    line-height: 1;
-    margin: 16px 0 8px;
-    text-shadow: 0 0 40px rgba(255,130,200,0.4);
-  }
-  .pct-sym { font-size: 36px; vertical-align: super; color: #f0d9fc; }
-
-  .verdict {
-    text-align: center;
-    font-family: 'Playfair Display', serif;
-    font-size: 20px;
-    font-style: italic;
-    color: #f9d4f0;
-    margin-bottom: 8px;
-  }
-  .verdict-desc {
-    text-align: center;
-    font-size: 13px;
-    color: #b08fc4;
-    line-height: 1.7;
-    max-width: 340px;
-    margin: 0 auto 20px;
-  }
-
-  .floating-hearts {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none; overflow: hidden;
-  }
-  .fh {
-    position: absolute;
-    font-size: 20px;
-    animation: floatUp 3s ease-in forwards;
-    opacity: 0;
-  }
-  @keyframes floatUp {
-    0%   { opacity: 0; transform: translateY(0) scale(0.5); }
-    20%  { opacity: 1; }
-    100% { opacity: 0; transform: translateY(-300px) scale(1.2); }
-  }
-
-  .reset-btn {
-    display: block;
-    margin: 0 auto;
-    padding: 10px 28px;
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 100px;
-    color: #c4a6d9;
-    font-size: 13px;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    letter-spacing: 0.5px;
-    transition: border-color 0.2s, color 0.2s;
-  }
-  .reset-btn:hover { border-color: rgba(255,130,200,0.5); color: #ff82c8; }
+  body { font-family: var(--font-sans); }
+  #app { padding: 1.5rem 1rem; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+  h1 { font-size: 22px; font-weight: 500; color: var(--color-text-primary); text-align: center; }
+  .subtitle { font-size: 14px; color: var(--color-text-secondary); text-align: center; }
+  #wheel-wrap { position: relative; width: 280px; height: 280px; }
+  #wheel-canvas { border-radius: 50%; display: block; }
+  #needle { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 28px solid var(--color-text-primary); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); z-index: 10; }
+  #center-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 60px; height: 60px; border-radius: 50%; background: var(--color-background-primary); border: 2px solid var(--color-border-secondary); font-size: 12px; font-weight: 500; color: var(--color-text-primary); cursor: pointer; display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.2; transition: background 0.15s; z-index: 11; }
+  #center-btn:hover { background: var(--color-background-secondary); }
+  #center-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .players { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; }
+  .player-chip { font-size: 13px; padding: 5px 12px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--color-text-secondary); cursor: pointer; transition: all 0.15s; }
+  .player-chip.active { border-color: transparent; font-weight: 500; }
+  .add-player { display: flex; gap: 8px; align-items: center; }
+  .add-player input { font-size: 13px; padding: 5px 10px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--color-text-primary); width: 130px; outline: none; }
+  .add-player button { font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-primary); cursor: pointer; }
+  #result-card { width: 100%; max-width: 340px; border-radius: var(--border-radius-lg); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-primary); padding: 1.25rem; text-align: center; display: none; animation: popIn 0.3s ease; }
+  @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .result-type { font-size: 12px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 8px; }
+  .result-player { font-size: 15px; color: var(--color-text-secondary); margin-bottom: 10px; }
+  .result-question { font-size: 16px; font-weight: 500; color: var(--color-text-primary); line-height: 1.5; }
+  .next-btn { margin-top: 1rem; font-size: 13px; padding: 7px 20px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-primary); cursor: pointer; }
+  .next-btn:hover { background: var(--color-background-secondary); }
+  .turn-info { font-size: 13px; color: var(--color-text-secondary); }
 </style>
 
-<div class="lc-wrap" id="wrap">
-  <div class="stars" id="stars"></div>
+<div id="app">
+  <h2 class="sr-only">Truth or Dare Roulette game with a spinning wheel</h2>
+  <h1>Truth or Dare Roulette</h1>
+  <p class="subtitle">Spin the wheel — land on Truth or Dare!</p>
 
-  <h2 class="sr-only">Love calculator — enter two names to find your compatibility percentage</h2>
-
-  <div class="lc-title">The <em>Love</em> Calculator</div>
-  <div class="lc-sub">✦ discover your compatibility ✦</div>
-
-  <div class="heart-deco">
-    <div class="line"></div>
-    <span class="heart-icon">♡</span>
-    <div class="line"></div>
+  <div class="players" id="player-list"></div>
+  <div class="add-player">
+    <input id="player-input" placeholder="Add player name..." maxlength="16" />
+    <button id="add-btn">+ Add</button>
   </div>
 
-  <div class="input-group">
-    <label class="input-label" for="name1">Your name</label>
-    <input class="lc-input" id="name1" type="text" placeholder="Enter your name..." autocomplete="off" />
+  <div id="wheel-wrap">
+    <div id="needle"></div>
+    <canvas id="wheel-canvas" width="280" height="280"></canvas>
+    <button id="center-btn">SPIN</button>
   </div>
 
-  <div class="plus-row">+</div>
-
-  <div class="input-group">
-    <label class="input-label" for="name2">Their name</label>
-    <input class="lc-input" id="name2" type="text" placeholder="Enter their name..." autocomplete="off" />
+  <div class="turn-info" id="turn-info"></div>
+  <div id="result-card">
+    <div class="result-type" id="result-type"></div>
+    <div class="result-player" id="result-player"></div>
+    <div class="result-question" id="result-question"></div>
+    <button class="next-btn" id="next-btn">Next Turn</button>
   </div>
-
-  <button class="calc-btn" id="calcBtn" onclick="calculate()">
-    ♥ Calculate Love ♥
-  </button>
-
-  <div class="result-area" id="resultArea">
-    <div class="result-names" id="resultNames"></div>
-    <div class="heart-meter"><div class="heart-fill" id="heartFill"></div></div>
-    <div class="pct-display" id="pctDisplay"><span class="pct-sym"></span></div>
-    <div class="verdict" id="verdict"></div>
-    <div class="verdict-desc" id="verdictDesc"></div>
-    <button class="reset-btn" onclick="resetCalc()">Try another pair</button>
-  </div>
-
-  <div class="floating-hearts" id="floatingHearts"></div>
 </div>
 
 <script>
-(function() {
-  // Generate stars
-  const starsEl = document.getElementById('stars');
-  for (let i = 0; i < 55; i++) {
-    const s = document.createElement('div');
-    s.className = 'star';
-    s.style.left = Math.random()*100+'%';
-    s.style.top = Math.random()*100+'%';
-    s.style.setProperty('--d', (2+Math.random()*4)+'s');
-    s.style.setProperty('--delay', (-Math.random()*4)+'s');
-    s.style.setProperty('--op', (0.4+Math.random()*0.6).toFixed(2));
-    starsEl.appendChild(s);
+const TRUTHS = [
+  "What's the most embarrassing thing that's happened to you?",
+  "What's a secret talent you have that not many people know about?",
+  "What's the silliest thing you've ever cried about?",
+  "What's your most irrational fear?",
+  "What's the worst gift you've ever received?",
+  "Have you ever laughed so hard you cried? What caused it?",
+  "What's one thing on your bucket list?",
+  "What's your go-to karaoke song?",
+  "What's a food you secretly love but are embarrassed to admit?",
+  "What's the strangest dream you've ever had?",
+  "Who was your celebrity crush growing up?",
+  "What's the funniest word in any language you know?",
+  "What's something you believed as a kid that turned out to be wrong?",
+  "What's the most adventurous thing you've ever done?",
+  "If you could live in any TV show world, which would you pick?",
+  "What's a habit you wish you could break?",
+  "What's the best piece of advice you've ever been given?",
+  "What's the weirdest thing you've ever eaten?",
+  "If animals could talk, which one do you think would be the rudest?",
+  "What's your guilty pleasure TV show or movie?",
+];
+
+const DARES = [
+  "Do your best impression of someone in this room!",
+  "Speak in an accent of the group's choosing for the next 3 minutes.",
+  "Do 10 jumping jacks right now!",
+  "Say the alphabet backwards as fast as you can.",
+  "Sing the first verse of your favorite song.",
+  "Do your funniest dance move for 30 seconds.",
+  "Tell a joke — it must make at least one person laugh.",
+  "Text a friend a random compliment right now.",
+  "Do your best robot impression for 1 minute.",
+  "Make up a short poem about the person to your left.",
+  "Imitate an animal of the group's choice until your next turn.",
+  "Do 5 push-ups (or try your best!).",
+  "Speak only in questions for the next 2 minutes.",
+  "Draw a portrait of the person across from you in 60 seconds.",
+  "Do your best moonwalk across the room.",
+  "Let the group give you a silly nickname for the rest of the game.",
+  "Say something nice about every person in the room.",
+  "Do your best superhero landing pose.",
+  "Whisper everything you say for the next 2 minutes.",
+  "Act out a movie scene without words until someone guesses it.",
+];
+
+const SEGMENTS = 12;
+const COLORS_TRUTH = ['#AFA9EC', '#EEEDFE', '#7F77DD'];
+const COLORS_DARE = ['#5DCAA5', '#E1F5EE', '#1D9E75'];
+const TEXT_TRUTH = '#3C3489';
+const TEXT_DARE = '#085041';
+
+let players = ['Player 1', 'Player 2'];
+let currentPlayerIdx = 0;
+let spinning = false;
+let angle = 0;
+
+const canvas = document.getElementById('wheel-canvas');
+const ctx = canvas.getContext('2d');
+const centerBtn = document.getElementById('center-btn');
+const resultCard = document.getElementById('result-card');
+const resultType = document.getElementById('result-type');
+const resultPlayer = document.getElementById('result-player');
+const resultQuestion = document.getElementById('result-question');
+const turnInfo = document.getElementById('turn-info');
+
+function getSegmentLabel(i) {
+  return i % 2 === 0 ? 'TRUTH' : 'DARE';
+}
+
+function drawWheel(rot) {
+  const cx = 140, cy = 140, r = 135;
+  const segAngle = (2 * Math.PI) / SEGMENTS;
+  ctx.clearRect(0, 0, 280, 280);
+
+  for (let i = 0; i < SEGMENTS; i++) {
+    const start = rot + i * segAngle;
+    const end = start + segAngle;
+    const isTruth = i % 2 === 0;
+    const palette = isTruth ? COLORS_TRUTH : COLORS_DARE;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, start, end);
+    ctx.closePath();
+    ctx.fillStyle = palette[i % palette.length];
+    ctx.fill();
+    ctx.strokeStyle = 'var(--color-background-primary, #fff)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(start + segAngle / 2);
+    ctx.textAlign = 'right';
+    ctx.fillStyle = isTruth ? TEXT_TRUTH : TEXT_DARE;
+    ctx.font = '500 11px sans-serif';
+    ctx.fillText(isTruth ? 'TRUTH' : 'DARE', r - 10, 4);
+    ctx.restore();
   }
 
-  window.calculate = function() {
-    const n1 = document.getElementById('name1').value.trim();
-    const n2 = document.getElementById('name2').value.trim();
-    if (!n1 || !n2) {
-      const empty = !n1 ? 'name1' : 'name2';
-      document.getElementById(empty).focus();
-      return;
+  ctx.beginPath();
+  ctx.arc(cx, cy, 32, 0, 2 * Math.PI);
+  ctx.fillStyle = 'var(--color-background-primary, #fff)';
+  ctx.fill();
+  ctx.strokeStyle = 'var(--color-border-secondary, #ccc)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+}
+
+function spinWheel() {
+  if (spinning || players.length === 0) return;
+  spinning = true;
+  resultCard.style.display = 'none';
+  centerBtn.disabled = true;
+  centerBtn.textContent = '...';
+
+  const totalRot = (Math.random() * 6 + 8) * Math.PI * 2;
+  const duration = 3500;
+  const start = performance.now();
+  const startAngle = angle;
+
+  function ease(t) { return 1 - Math.pow(1 - t, 4); }
+
+  function animate(now) {
+    const elapsed = now - start;
+    const t = Math.min(elapsed / duration, 1);
+    angle = startAngle + totalRot * ease(t);
+    drawWheel(angle);
+    if (t < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      spinning = false;
+      centerBtn.disabled = false;
+      centerBtn.textContent = 'SPIN';
+      showResult();
     }
+  }
+  requestAnimationFrame(animate);
+}
 
-    const pct = lovePct(n1, n2);
-    const { verdict, desc, emoji } = getVerdict(pct);
+function showResult() {
+  const segAngle = (2 * Math.PI) / SEGMENTS;
+  const normalized = ((-(angle) % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+  const landed = Math.floor(normalized / segAngle) % SEGMENTS;
+  const isTruth = landed % 2 === 0;
 
-    document.getElementById('resultNames').innerHTML =
-      `<span>${n1}</span> &amp; <span>${n2}</span>`;
+  const player = players[currentPlayerIdx];
+  const pool = isTruth ? TRUTHS : DARES;
+  const q = pool[Math.floor(Math.random() * pool.length)];
 
-    const ra = document.getElementById('resultArea');
-    ra.style.display = 'block';
+  resultType.textContent = isTruth ? 'TRUTH' : 'DARE';
+  resultType.style.color = isTruth ? TEXT_TRUTH : TEXT_DARE;
+  resultPlayer.textContent = player + "'s turn";
+  resultQuestion.textContent = q;
+  resultCard.style.display = 'block';
 
-    setTimeout(() => {
-      const fill = document.getElementById('heartFill');
-      fill.style.width = pct + '%';
+  updateTurnInfo();
+}
 
-      let count = 0;
-      const interval = setInterval(() => {
-        if (count >= pct) { clearInterval(interval); }
-        document.getElementById('pctDisplay').innerHTML =
-          `${count}<span class="pct-sym">%</span>`;
-        count = Math.min(count + Math.ceil(pct / 40), pct);
-      }, 35);
-    }, 80);
+function nextTurn() {
+  currentPlayerIdx = (currentPlayerIdx + 1) % players.length;
+  resultCard.style.display = 'none';
+  updateTurnInfo();
+}
 
-    document.getElementById('verdict').textContent = emoji + ' ' + verdict;
-    document.getElementById('verdictDesc').textContent = desc;
+function updateTurnInfo() {
+  if (players.length === 0) { turnInfo.textContent = 'Add players to start!'; return; }
+  turnInfo.textContent = 'Up next: ' + players[currentPlayerIdx];
+}
 
-    if (pct >= 70) spawnHearts();
-  };
-
-  function lovePct(a, b) {
-    const combined = (a + b).toUpperCase().replace(/\s/g,'');
-    let hash = 0;
-    for (let i = 0; i < combined.length; i++) {
-      hash = ((hash << 5) - hash + combined.charCodeAt(i)) | 0;
+function renderPlayers() {
+  const list = document.getElementById('player-list');
+  list.innerHTML = '';
+  const chipColors = ['#7F77DD','#1D9E75','#D85A30','#D4537E','#378ADD','#639922','#BA7517'];
+  players.forEach((p, i) => {
+    const chip = document.createElement('span');
+    chip.className = 'player-chip' + (i === currentPlayerIdx ? ' active' : '');
+    chip.textContent = p;
+    if (i === currentPlayerIdx) {
+      chip.style.background = chipColors[i % chipColors.length];
+      chip.style.color = '#fff';
     }
-    const raw = Math.abs(hash) % 100;
-    return raw < 10 ? raw + 10 : raw;
-  }
+    chip.onclick = () => {
+      const newName = prompt('Rename player:', p);
+      if (newName && newName.trim()) { players[i] = newName.trim().slice(0,16); renderPlayers(); updateTurnInfo(); }
+    };
+    list.appendChild(chip);
 
-  function getVerdict(pct) {
-    if (pct >= 90) return { verdict: 'Soulmates', emoji: '💞', desc: 'The stars have aligned perfectly for you two. This is a rare and magical connection — cherish it with all your heart.' };
-    if (pct >= 75) return { verdict: 'Deeply in Love', emoji: '❤️', desc: 'Your hearts beat in beautiful harmony. You share a wonderful bond that's hard to find in a lifetime.' };
-    if (pct >= 60) return { verdict: 'Great Match', emoji: '💕', desc: 'You two complement each other wonderfully. There's real warmth and understanding between you.' };
-    if (pct >= 45) return { verdict: 'Promising Sparks', emoji: '✨', desc: 'There's a sweet connection here. With a little nurturing, something beautiful could blossom.' };
-    if (pct >= 30) return { verdict: 'Complicated Hearts', emoji: '💫', desc: 'Love isn't always simple — sometimes the most interesting stories begin in unexpected places.' };
-    return { verdict: 'Opposites Attract?', emoji: '🌙', desc: 'They say opposites attract! Maybe the universe has a surprising twist in store for you both.' };
-  }
-
-  function spawnHearts() {
-    const container = document.getElementById('floatingHearts');
-    const hearts = ['♥','♡','💕','💖','💗'];
-    for (let i = 0; i < 18; i++) {
-      const h = document.createElement('span');
-      h.className = 'fh';
-      h.textContent = hearts[Math.floor(Math.random()*hearts.length)];
-      h.style.left = (10 + Math.random()*80) + '%';
-      h.style.bottom = '40px';
-      h.style.animationDelay = (Math.random()*1.5)+'s';
-      h.style.fontSize = (14+Math.random()*18)+'px';
-      h.style.color = ['#ff82c8','#ff4081','#f48fb1','#fce4ec','#ff80ab'][Math.floor(Math.random()*5)];
-      container.appendChild(h);
-      setTimeout(() => h.remove(), 4000);
-    }
-  }
-
-  window.resetCalc = function() {
-    document.getElementById('name1').value = '';
-    document.getElementById('name2').value = '';
-    document.getElementById('resultArea').style.display = 'none';
-    document.getElementById('heartFill').style.width = '0%';
-    document.getElementById('name1').focus();
-  };
-
-  document.getElementById('name2').addEventListener('keydown', e => {
-    if (e.key === 'Enter') calculate();
+    const del = document.createElement('span');
+    del.textContent = '×';
+    del.style.cssText = 'font-size:11px;color:var(--color-text-secondary);cursor:pointer;margin-left:-4px;';
+    del.onclick = (e) => { e.stopPropagation(); players.splice(i,1); if(currentPlayerIdx>=players.length) currentPlayerIdx=0; renderPlayers(); updateTurnInfo(); };
+    list.appendChild(del);
   });
-  document.getElementById('name1').addEventListener('keydown', e => {
-    if (e.key === 'Enter') document.getElementById('name2').focus();
-  });
-})();
+  updateTurnInfo();
+}
+
+document.getElementById('add-btn').onclick = () => {
+  const inp = document.getElementById('player-input');
+  const name = inp.value.trim().slice(0,16);
+  if (name && players.length < 8) { players.push(name); inp.value = ''; renderPlayers(); }
+};
+document.getElementById('player-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('add-btn').click();
+});
+centerBtn.onclick = spinWheel;
+document.getElementById('next-btn').onclick = nextTurn;
+
+drawWheel(0);
+renderPlayers();
 </script>
