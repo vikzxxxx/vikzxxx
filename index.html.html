@@ -1,439 +1,373 @@
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
 
-  .flames-root {
-    min-height: 520px;
-    padding: 2rem 1.5rem;
-    font-family: 'Quicksand', sans-serif;
-    text-align: center;
-  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  .flames-title {
-    font-family: 'Pacifico', cursive;
-    font-size: 42px;
-    letter-spacing: 6px;
-    margin-bottom: 4px;
-    background: linear-gradient(135deg, #e84393, #ff6b6b, #ffd93d, #6bcb77, #4d96ff, #c77dff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .flames-subtitle {
-    font-size: 13px;
-    color: var(--color-text-secondary);
-    margin-bottom: 2rem;
-    letter-spacing: 1px;
-  }
-
-  .input-row {
-    display: flex;
-    gap: 12px;
-    max-width: 480px;
-    margin: 0 auto 1rem;
-    align-items: center;
-  }
-
-  .input-row input {
-    flex: 1;
-    padding: 10px 16px;
-    border-radius: 999px;
-    border: 1.5px solid var(--color-border-secondary);
-    background: var(--color-background-primary);
-    color: var(--color-text-primary);
-    font-family: 'Quicksand', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    text-align: center;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  .input-row input:focus {
-    border-color: #e84393;
-  }
-
-  .input-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--color-text-secondary);
-    width: 44px;
-    text-align: right;
-    flex-shrink: 0;
-  }
-
-  .go-btn {
-    display: inline-block;
-    margin: 0.5rem auto 1.5rem;
-    padding: 10px 32px;
-    border-radius: 999px;
-    border: none;
-    background: linear-gradient(135deg, #e84393, #ff6b6b);
-    color: #fff;
-    font-family: 'Quicksand', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: transform 0.15s, opacity 0.15s;
-    letter-spacing: 1px;
-  }
-
-  .go-btn:hover { opacity: 0.9; transform: scale(1.04); }
-  .go-btn:active { transform: scale(0.97); }
-
-  .letters-row {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 1.2rem;
-    min-height: 36px;
-  }
-
-  .letter-bubble {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: 700;
-    transition: all 0.3s;
-  }
-
-  .letter-bubble.common {
-    background: #ffd93d22;
-    color: #b89800;
-    border: 1.5px solid #ffd93d66;
-    text-decoration: line-through;
-    opacity: 0.45;
-  }
-
-  .letter-bubble.unique {
-    background: var(--color-background-secondary);
-    color: var(--color-text-primary);
-    border: 1.5px solid var(--color-border-secondary);
-  }
-
-  .count-display {
-    font-size: 16px;
-    color: var(--color-text-secondary);
-    margin-bottom: 1.5rem;
-    min-height: 22px;
-  }
-
-  .count-display span {
-    font-weight: 700;
-    color: var(--color-text-primary);
-  }
-
-  .flames-circles {
-    display: flex;
-    justify-content: center;
-    gap: 14px;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
-  }
-
-  .f-circle {
-    width: 54px;
-    height: 54px;
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    font-weight: 700;
-    font-family: 'Pacifico', cursive;
-    border: 2px solid;
-    transition: all 0.4s;
-    line-height: 1;
-  }
-
-  .f-circle .flabel {
-    font-size: 9px;
-    font-family: 'Quicksand', sans-serif;
-    font-weight: 600;
-    margin-top: 2px;
-    letter-spacing: 0.5px;
-  }
-
-  .f-circle.F { border-color: #e84393; color: #e84393; }
-  .f-circle.L { border-color: #ff6b6b; color: #ff6b6b; }
-  .f-circle.A { border-color: #ffd93d; color: #b89300; }
-  .f-circle.M { border-color: #6bcb77; color: #3a8f44; }
-  .f-circle.E { border-color: #4d96ff; color: #4d96ff; }
-  .f-circle.S { border-color: #c77dff; color: #c77dff; }
-
-  .f-circle.eliminated {
-    opacity: 0.18;
-    transform: scale(0.88);
-  }
-
-  .f-circle.winner {
-    transform: scale(1.22);
-    box-shadow: 0 0 0 4px rgba(255,255,255,0.15), 0 0 24px 0 currentColor;
-    animation: pulse 1s infinite alternate;
-  }
-
-  @keyframes pulse {
-    from { transform: scale(1.18); }
-    to   { transform: scale(1.27); }
-  }
-
-  .result-box {
-    max-width: 340px;
-    margin: 0 auto;
-    padding: 1.2rem 2rem;
+  .lc-wrap {
+    font-family: 'DM Sans', sans-serif;
+    min-height: 560px;
+    background: linear-gradient(135deg, #1a0a2e 0%, #2d1054 40%, #1a0a2e 100%);
     border-radius: 20px;
-    border: 2px solid;
-    animation: fadeIn 0.6s ease;
+    padding: 40px 32px 48px;
+    position: relative;
+    overflow: hidden;
   }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(12px); }
+  .stars {
+    position: absolute; inset: 0; pointer-events: none;
+  }
+  .star {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    opacity: 0;
+    animation: twinkle var(--d, 3s) ease-in-out infinite var(--delay, 0s);
+  }
+  @keyframes twinkle {
+    0%,100% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: var(--op, 0.8); transform: scale(1); }
+  }
+
+  .lc-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 34px;
+    font-weight: 400;
+    color: #f9d4f0;
+    text-align: center;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    position: relative;
+  }
+  .lc-title em { font-style: italic; color: #ff82c8; }
+
+  .lc-sub {
+    text-align: center;
+    font-size: 13px;
+    color: #b08fc4;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 36px;
+    position: relative;
+  }
+
+  .heart-deco {
+    display: flex; align-items: center; justify-content: center;
+    gap: 12px; margin-bottom: 32px; position: relative;
+  }
+  .heart-deco .line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, #b08fc4, transparent); }
+  .heart-icon { font-size: 20px; animation: pulse-heart 1.4s ease-in-out infinite; }
+  @keyframes pulse-heart {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.25); }
+  }
+
+  .input-group {
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .input-label {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #c4a6d9;
+    margin-bottom: 8px;
+    display: block;
+    font-weight: 500;
+  }
+  .lc-input {
+    width: 100%;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 14px;
+    padding: 14px 18px;
+    font-size: 17px;
+    font-family: 'Playfair Display', serif;
+    color: #f0d9fc;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .lc-input::placeholder { color: #7a5e90; font-style: italic; }
+  .lc-input:focus {
+    border-color: rgba(255,130,200,0.5);
+    background: rgba(255,255,255,0.11);
+  }
+
+  .plus-row {
+    display: flex; align-items: center; justify-content: center;
+    margin: 4px 0 20px; font-size: 22px; color: #ff82c8; opacity: 0.7;
+  }
+
+  .calc-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #c2185b, #880e4f);
+    border: none;
+    border-radius: 14px;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: #ffe4f3;
+    cursor: pointer;
+    letter-spacing: 0.4px;
+    transition: transform 0.15s, opacity 0.15s, box-shadow 0.15s;
+    margin-top: 4px;
+    box-shadow: 0 4px 24px rgba(194,24,91,0.35);
+    position: relative;
+  }
+  .calc-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(194,24,91,0.5); }
+  .calc-btn:active { transform: translateY(0); }
+
+  .result-area {
+    margin-top: 32px;
+    display: none;
+    animation: fadeUp 0.6s ease forwards;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  .result-label {
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-
-  .result-word {
-    font-family: 'Pacifico', cursive;
-    font-size: 32px;
-    margin-bottom: 4px;
-  }
-
-  .result-emoji {
-    font-size: 28px;
-  }
-
-  .result-box.F { border-color: #e84393; color: #e84393; background: #e8439311; }
-  .result-box.L { border-color: #ff6b6b; color: #ff6b6b; background: #ff6b6b11; }
-  .result-box.A { border-color: #ffd93d; color: #b89300; background: #ffd93d11; }
-  .result-box.M { border-color: #6bcb77; color: #3a8f44; background: #6bcb7711; }
-  .result-box.E { border-color: #4d96ff; color: #4d96ff; background: #4d96ff11; }
-  .result-box.S { border-color: #c77dff; color: #c77dff; background: #c77dff11; }
-
-  .reset-btn {
-    display: inline-block;
-    margin-top: 1rem;
-    padding: 7px 22px;
-    border-radius: 999px;
-    border: 1.5px solid var(--color-border-secondary);
-    background: transparent;
-    color: var(--color-text-secondary);
-    font-family: 'Quicksand', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-
-  .reset-btn:hover { background: var(--color-background-secondary); }
-
-  .hearts {
-    position: absolute;
-    pointer-events: none;
+  .result-names {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
     font-size: 18px;
-    animation: floatHeart 2s ease-out forwards;
+    color: #f0d9fc;
+    margin-bottom: 20px;
+    letter-spacing: 0.3px;
+  }
+  .result-names span { color: #ff82c8; }
+
+  .heart-meter {
+    position: relative;
+    height: 22px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 100px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .heart-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #c2185b, #ff82c8, #ff4081);
+    border-radius: 100px;
+    width: 0%;
+    transition: width 1.4s cubic-bezier(0.23,1,0.32,1);
+    position: relative;
+  }
+  .heart-fill::after {
+    content: '';
+    position: absolute;
+    top: 3px; left: 6px; right: 6px; height: 6px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 100px;
+  }
+
+  .pct-display {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 64px;
+    font-weight: 700;
+    color: #ff82c8;
+    line-height: 1;
+    margin: 16px 0 8px;
+    text-shadow: 0 0 40px rgba(255,130,200,0.4);
+  }
+  .pct-sym { font-size: 36px; vertical-align: super; color: #f0d9fc; }
+
+  .verdict {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-style: italic;
+    color: #f9d4f0;
+    margin-bottom: 8px;
+  }
+  .verdict-desc {
+    text-align: center;
+    font-size: 13px;
+    color: #b08fc4;
+    line-height: 1.7;
+    max-width: 340px;
+    margin: 0 auto 20px;
+  }
+
+  .floating-hearts {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; overflow: hidden;
+  }
+  .fh {
+    position: absolute;
+    font-size: 20px;
+    animation: floatUp 3s ease-in forwards;
     opacity: 0;
   }
-
-  @keyframes floatHeart {
-    0%   { opacity: 1; transform: translateY(0) scale(1); }
-    100% { opacity: 0; transform: translateY(-60px) scale(1.4); }
+  @keyframes floatUp {
+    0%   { opacity: 0; transform: translateY(0) scale(0.5); }
+    20%  { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-300px) scale(1.2); }
   }
+
+  .reset-btn {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 28px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 100px;
+    color: #c4a6d9;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .reset-btn:hover { border-color: rgba(255,130,200,0.5); color: #ff82c8; }
 </style>
 
-<div class="flames-root">
-  <h2 class="sr-only">FLAMES relationship calculator game</h2>
-  <div class="flames-title">FLAMES</div>
-  <div class="flames-subtitle">Friends · Love · Affection · Marriage · Enemy · Siblings</div>
+<div class="lc-wrap" id="wrap">
+  <div class="stars" id="stars"></div>
 
-  <div id="inputArea">
-    <div class="input-row">
-      <span class="input-label">Your name</span>
-      <input id="name1" type="text" placeholder="e.g. Anika" maxlength="40" />
-    </div>
-    <div class="input-row">
-      <span class="input-label">Their name</span>
-      <input id="name2" type="text" placeholder="e.g. Rohan" maxlength="40" />
-    </div>
-    <br/>
-    <button class="go-btn" onclick="startFlames()">Find out!</button>
+  <h2 class="sr-only">Love calculator — enter two names to find your compatibility percentage</h2>
+
+  <div class="lc-title">The <em>Love</em> Calculator</div>
+  <div class="lc-sub">✦ discover your compatibility ✦</div>
+
+  <div class="heart-deco">
+    <div class="line"></div>
+    <span class="heart-icon">♡</span>
+    <div class="line"></div>
   </div>
 
-  <div id="lettersArea" style="display:none">
-    <div id="name1Letters" class="letters-row"></div>
-    <div id="name2Letters" class="letters-row"></div>
-    <div class="count-display" id="countDisplay"></div>
+  <div class="input-group">
+    <label class="input-label" for="name1">Your name</label>
+    <input class="lc-input" id="name1" type="text" placeholder="Enter your name..." autocomplete="off" />
   </div>
 
-  <div class="flames-circles" id="flamesCircles">
-    <div class="f-circle F" id="cF"><span>F</span><span class="flabel">friends</span></div>
-    <div class="f-circle L" id="cL"><span>L</span><span class="flabel">love</span></div>
-    <div class="f-circle A" id="cA"><span>A</span><span class="flabel">affection</span></div>
-    <div class="f-circle M" id="cM"><span>M</span><span class="flabel">marriage</span></div>
-    <div class="f-circle E" id="cE"><span>E</span><span class="flabel">enemy</span></div>
-    <div class="f-circle S" id="cS"><span>S</span><span class="flabel">siblings</span></div>
+  <div class="plus-row">+</div>
+
+  <div class="input-group">
+    <label class="input-label" for="name2">Their name</label>
+    <input class="lc-input" id="name2" type="text" placeholder="Enter their name..." autocomplete="off" />
   </div>
 
-  <div id="resultArea"></div>
+  <button class="calc-btn" id="calcBtn" onclick="calculate()">
+    ♥ Calculate Love ♥
+  </button>
+
+  <div class="result-area" id="resultArea">
+    <div class="result-names" id="resultNames"></div>
+    <div class="heart-meter"><div class="heart-fill" id="heartFill"></div></div>
+    <div class="pct-display" id="pctDisplay"><span class="pct-sym"></span></div>
+    <div class="verdict" id="verdict"></div>
+    <div class="verdict-desc" id="verdictDesc"></div>
+    <button class="reset-btn" onclick="resetCalc()">Try another pair</button>
+  </div>
+
+  <div class="floating-hearts" id="floatingHearts"></div>
 </div>
 
 <script>
-  const meanings = {
-    F: { word: 'Friends', emoji: '👫', desc: 'You two are great pals!' },
-    L: { word: 'Love', emoji: '❤️', desc: 'It\'s written in the stars!' },
-    A: { word: 'Affection', emoji: '🥰', desc: 'A warm, caring bond.' },
-    M: { word: 'Marriage', emoji: '💍', desc: 'Forever and always!' },
-    E: { word: 'Enemy', emoji: '⚡', desc: 'Opposites indeed!' },
-    S: { word: 'Siblings', emoji: '🤝', desc: 'Like family to each other.' }
-  };
-
-  function clean(name) {
-    return name.toLowerCase().replace(/[^a-z]/g, '');
+(function() {
+  // Generate stars
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 55; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.left = Math.random()*100+'%';
+    s.style.top = Math.random()*100+'%';
+    s.style.setProperty('--d', (2+Math.random()*4)+'s');
+    s.style.setProperty('--delay', (-Math.random()*4)+'s');
+    s.style.setProperty('--op', (0.4+Math.random()*0.6).toFixed(2));
+    starsEl.appendChild(s);
   }
 
-  function cancelCommon(a, b) {
-    let arr1 = a.split('');
-    let arr2 = b.split('');
-    let marked1 = new Array(arr1.length).fill(false);
-    let marked2 = new Array(arr2.length).fill(false);
-    for (let i = 0; i < arr1.length; i++) {
-      for (let j = 0; j < arr2.length; j++) {
-        if (!marked1[i] && !marked2[j] && arr1[i] === arr2[j]) {
-          marked1[i] = true;
-          marked2[j] = true;
-          break;
-        }
-      }
-    }
-    return { marked1, arr1, marked2, arr2 };
-  }
-
-  function renderLetters(containerId, arr, marked, original) {
-    const el = document.getElementById(containerId);
-    el.innerHTML = '';
-    let orig = original.split('');
-    let ai = 0;
-    for (let i = 0; i < orig.length; i++) {
-      const bub = document.createElement('div');
-      bub.className = 'letter-bubble';
-      bub.textContent = orig[i].toUpperCase();
-      if (/[a-zA-Z]/.test(orig[i])) {
-        bub.className += marked[ai] ? ' common' : ' unique';
-        ai++;
-      } else {
-        bub.className += ' unique';
-      }
-      el.appendChild(bub);
-    }
-  }
-
-  function flamesResult(count) {
-    const order = ['F','L','A','M','E','S'];
-    let remaining = [...order];
-    let idx = 0;
-    while (remaining.length > 1) {
-      idx = (idx + count - 1) % remaining.length;
-      remaining.splice(idx, 1);
-      if (idx >= remaining.length) idx = 0;
-    }
-    return remaining[0];
-  }
-
-  function startFlames() {
-    const raw1 = document.getElementById('name1').value.trim();
-    const raw2 = document.getElementById('name2').value.trim();
-    if (!raw1 || !raw2) {
-      document.getElementById('name1').focus();
+  window.calculate = function() {
+    const n1 = document.getElementById('name1').value.trim();
+    const n2 = document.getElementById('name2').value.trim();
+    if (!n1 || !n2) {
+      const empty = !n1 ? 'name1' : 'name2';
+      document.getElementById(empty).focus();
       return;
     }
 
-    const a = clean(raw1), b = clean(raw2);
-    const { marked1, arr1, marked2, arr2 } = cancelCommon(a, b);
-    const remaining = marked1.filter(x => !x).length + marked2.filter(x => !x).length;
+    const pct = lovePct(n1, n2);
+    const { verdict, desc, emoji } = getVerdict(pct);
 
-    document.getElementById('lettersArea').style.display = 'block';
-    renderLetters('name1Letters', arr1, marked1, raw1);
-    renderLetters('name2Letters', arr2, marked2, raw2);
+    document.getElementById('resultNames').innerHTML =
+      `<span>${n1}</span> &amp; <span>${n2}</span>`;
 
-    const countEl = document.getElementById('countDisplay');
-    countEl.innerHTML = `Remaining letters: <span>${remaining}</span>`;
-
-    const circles = ['F','L','A','M','E','S'];
-    circles.forEach(l => {
-      const el = document.getElementById('c'+l);
-      el.classList.remove('eliminated','winner');
-    });
-
-    const winner = flamesResult(remaining);
-
-    const order = ['F','L','A','M','E','S'];
-    let remaining2 = [...order];
-    let idx = 0;
-    let elimOrder = [];
-    while (remaining2.length > 1) {
-      idx = (idx + remaining - 1) % remaining2.length;
-      elimOrder.push(remaining2[idx]);
-      remaining2.splice(idx, 1);
-      if (idx >= remaining2.length) idx = 0;
-    }
-
-    let delay = 0;
-    elimOrder.forEach(l => {
-      setTimeout(() => {
-        document.getElementById('c'+l).classList.add('eliminated');
-      }, delay += 350);
-    });
+    const ra = document.getElementById('resultArea');
+    ra.style.display = 'block';
 
     setTimeout(() => {
-      document.getElementById('c'+winner).classList.add('winner');
-      showResult(winner);
-    }, delay + 400);
+      const fill = document.getElementById('heartFill');
+      fill.style.width = pct + '%';
+
+      let count = 0;
+      const interval = setInterval(() => {
+        if (count >= pct) { clearInterval(interval); }
+        document.getElementById('pctDisplay').innerHTML =
+          `${count}<span class="pct-sym">%</span>`;
+        count = Math.min(count + Math.ceil(pct / 40), pct);
+      }, 35);
+    }, 80);
+
+    document.getElementById('verdict').textContent = emoji + ' ' + verdict;
+    document.getElementById('verdictDesc').textContent = desc;
+
+    if (pct >= 70) spawnHearts();
+  };
+
+  function lovePct(a, b) {
+    const combined = (a + b).toUpperCase().replace(/\s/g,'');
+    let hash = 0;
+    for (let i = 0; i < combined.length; i++) {
+      hash = ((hash << 5) - hash + combined.charCodeAt(i)) | 0;
+    }
+    const raw = Math.abs(hash) % 100;
+    return raw < 10 ? raw + 10 : raw;
   }
 
-  function showResult(key) {
-    const m = meanings[key];
-    const ra = document.getElementById('resultArea');
-    ra.innerHTML = `
-      <div class="result-box ${key}">
-        <div class="result-label">You are...</div>
-        <div class="result-word">${m.word}</div>
-        <div class="result-emoji">${m.emoji}</div>
-        <div style="font-size:13px;margin-top:6px;opacity:0.75;">${m.desc}</div>
-      </div>
-      <br/>
-      <button class="reset-btn" onclick="resetGame()">Try again</button>
-    `;
+  function getVerdict(pct) {
+    if (pct >= 90) return { verdict: 'Soulmates', emoji: '💞', desc: 'The stars have aligned perfectly for you two. This is a rare and magical connection — cherish it with all your heart.' };
+    if (pct >= 75) return { verdict: 'Deeply in Love', emoji: '❤️', desc: 'Your hearts beat in beautiful harmony. You share a wonderful bond that's hard to find in a lifetime.' };
+    if (pct >= 60) return { verdict: 'Great Match', emoji: '💕', desc: 'You two complement each other wonderfully. There's real warmth and understanding between you.' };
+    if (pct >= 45) return { verdict: 'Promising Sparks', emoji: '✨', desc: 'There's a sweet connection here. With a little nurturing, something beautiful could blossom.' };
+    if (pct >= 30) return { verdict: 'Complicated Hearts', emoji: '💫', desc: 'Love isn't always simple — sometimes the most interesting stories begin in unexpected places.' };
+    return { verdict: 'Opposites Attract?', emoji: '🌙', desc: 'They say opposites attract! Maybe the universe has a surprising twist in store for you both.' };
   }
 
-  function resetGame() {
+  function spawnHearts() {
+    const container = document.getElementById('floatingHearts');
+    const hearts = ['♥','♡','💕','💖','💗'];
+    for (let i = 0; i < 18; i++) {
+      const h = document.createElement('span');
+      h.className = 'fh';
+      h.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+      h.style.left = (10 + Math.random()*80) + '%';
+      h.style.bottom = '40px';
+      h.style.animationDelay = (Math.random()*1.5)+'s';
+      h.style.fontSize = (14+Math.random()*18)+'px';
+      h.style.color = ['#ff82c8','#ff4081','#f48fb1','#fce4ec','#ff80ab'][Math.floor(Math.random()*5)];
+      container.appendChild(h);
+      setTimeout(() => h.remove(), 4000);
+    }
+  }
+
+  window.resetCalc = function() {
     document.getElementById('name1').value = '';
     document.getElementById('name2').value = '';
-    document.getElementById('lettersArea').style.display = 'none';
-    document.getElementById('resultArea').innerHTML = '';
-    ['F','L','A','M','E','S'].forEach(l => {
-      const el = document.getElementById('c'+l);
-      el.classList.remove('eliminated','winner');
-    });
+    document.getElementById('resultArea').style.display = 'none';
+    document.getElementById('heartFill').style.width = '0%';
     document.getElementById('name1').focus();
-  }
+  };
 
   document.getElementById('name2').addEventListener('keydown', e => {
-    if (e.key === 'Enter') startFlames();
+    if (e.key === 'Enter') calculate();
   });
   document.getElementById('name1').addEventListener('keydown', e => {
     if (e.key === 'Enter') document.getElementById('name2').focus();
   });
+})();
 </script>
