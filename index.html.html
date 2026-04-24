@@ -1,0 +1,439 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600&display=swap');
+
+  .flames-root {
+    min-height: 520px;
+    padding: 2rem 1.5rem;
+    font-family: 'Quicksand', sans-serif;
+    text-align: center;
+  }
+
+  .flames-title {
+    font-family: 'Pacifico', cursive;
+    font-size: 42px;
+    letter-spacing: 6px;
+    margin-bottom: 4px;
+    background: linear-gradient(135deg, #e84393, #ff6b6b, #ffd93d, #6bcb77, #4d96ff, #c77dff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .flames-subtitle {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    margin-bottom: 2rem;
+    letter-spacing: 1px;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 12px;
+    max-width: 480px;
+    margin: 0 auto 1rem;
+    align-items: center;
+  }
+
+  .input-row input {
+    flex: 1;
+    padding: 10px 16px;
+    border-radius: 999px;
+    border: 1.5px solid var(--color-border-secondary);
+    background: var(--color-background-primary);
+    color: var(--color-text-primary);
+    font-family: 'Quicksand', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .input-row input:focus {
+    border-color: #e84393;
+  }
+
+  .input-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    width: 44px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .go-btn {
+    display: inline-block;
+    margin: 0.5rem auto 1.5rem;
+    padding: 10px 32px;
+    border-radius: 999px;
+    border: none;
+    background: linear-gradient(135deg, #e84393, #ff6b6b);
+    color: #fff;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, opacity 0.15s;
+    letter-spacing: 1px;
+  }
+
+  .go-btn:hover { opacity: 0.9; transform: scale(1.04); }
+  .go-btn:active { transform: scale(0.97); }
+
+  .letters-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 1.2rem;
+    min-height: 36px;
+  }
+
+  .letter-bubble {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    transition: all 0.3s;
+  }
+
+  .letter-bubble.common {
+    background: #ffd93d22;
+    color: #b89800;
+    border: 1.5px solid #ffd93d66;
+    text-decoration: line-through;
+    opacity: 0.45;
+  }
+
+  .letter-bubble.unique {
+    background: var(--color-background-secondary);
+    color: var(--color-text-primary);
+    border: 1.5px solid var(--color-border-secondary);
+  }
+
+  .count-display {
+    font-size: 16px;
+    color: var(--color-text-secondary);
+    margin-bottom: 1.5rem;
+    min-height: 22px;
+  }
+
+  .count-display span {
+    font-weight: 700;
+    color: var(--color-text-primary);
+  }
+
+  .flames-circles {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .f-circle {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    font-family: 'Pacifico', cursive;
+    border: 2px solid;
+    transition: all 0.4s;
+    line-height: 1;
+  }
+
+  .f-circle .flabel {
+    font-size: 9px;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    margin-top: 2px;
+    letter-spacing: 0.5px;
+  }
+
+  .f-circle.F { border-color: #e84393; color: #e84393; }
+  .f-circle.L { border-color: #ff6b6b; color: #ff6b6b; }
+  .f-circle.A { border-color: #ffd93d; color: #b89300; }
+  .f-circle.M { border-color: #6bcb77; color: #3a8f44; }
+  .f-circle.E { border-color: #4d96ff; color: #4d96ff; }
+  .f-circle.S { border-color: #c77dff; color: #c77dff; }
+
+  .f-circle.eliminated {
+    opacity: 0.18;
+    transform: scale(0.88);
+  }
+
+  .f-circle.winner {
+    transform: scale(1.22);
+    box-shadow: 0 0 0 4px rgba(255,255,255,0.15), 0 0 24px 0 currentColor;
+    animation: pulse 1s infinite alternate;
+  }
+
+  @keyframes pulse {
+    from { transform: scale(1.18); }
+    to   { transform: scale(1.27); }
+  }
+
+  .result-box {
+    max-width: 340px;
+    margin: 0 auto;
+    padding: 1.2rem 2rem;
+    border-radius: 20px;
+    border: 2px solid;
+    animation: fadeIn 0.6s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .result-word {
+    font-family: 'Pacifico', cursive;
+    font-size: 32px;
+    margin-bottom: 4px;
+  }
+
+  .result-emoji {
+    font-size: 28px;
+  }
+
+  .result-box.F { border-color: #e84393; color: #e84393; background: #e8439311; }
+  .result-box.L { border-color: #ff6b6b; color: #ff6b6b; background: #ff6b6b11; }
+  .result-box.A { border-color: #ffd93d; color: #b89300; background: #ffd93d11; }
+  .result-box.M { border-color: #6bcb77; color: #3a8f44; background: #6bcb7711; }
+  .result-box.E { border-color: #4d96ff; color: #4d96ff; background: #4d96ff11; }
+  .result-box.S { border-color: #c77dff; color: #c77dff; background: #c77dff11; }
+
+  .reset-btn {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 7px 22px;
+    border-radius: 999px;
+    border: 1.5px solid var(--color-border-secondary);
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-family: 'Quicksand', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .reset-btn:hover { background: var(--color-background-secondary); }
+
+  .hearts {
+    position: absolute;
+    pointer-events: none;
+    font-size: 18px;
+    animation: floatHeart 2s ease-out forwards;
+    opacity: 0;
+  }
+
+  @keyframes floatHeart {
+    0%   { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-60px) scale(1.4); }
+  }
+</style>
+
+<div class="flames-root">
+  <h2 class="sr-only">FLAMES relationship calculator game</h2>
+  <div class="flames-title">FLAMES</div>
+  <div class="flames-subtitle">Friends · Love · Affection · Marriage · Enemy · Siblings</div>
+
+  <div id="inputArea">
+    <div class="input-row">
+      <span class="input-label">Your name</span>
+      <input id="name1" type="text" placeholder="e.g. Anika" maxlength="40" />
+    </div>
+    <div class="input-row">
+      <span class="input-label">Their name</span>
+      <input id="name2" type="text" placeholder="e.g. Rohan" maxlength="40" />
+    </div>
+    <br/>
+    <button class="go-btn" onclick="startFlames()">Find out!</button>
+  </div>
+
+  <div id="lettersArea" style="display:none">
+    <div id="name1Letters" class="letters-row"></div>
+    <div id="name2Letters" class="letters-row"></div>
+    <div class="count-display" id="countDisplay"></div>
+  </div>
+
+  <div class="flames-circles" id="flamesCircles">
+    <div class="f-circle F" id="cF"><span>F</span><span class="flabel">friends</span></div>
+    <div class="f-circle L" id="cL"><span>L</span><span class="flabel">love</span></div>
+    <div class="f-circle A" id="cA"><span>A</span><span class="flabel">affection</span></div>
+    <div class="f-circle M" id="cM"><span>M</span><span class="flabel">marriage</span></div>
+    <div class="f-circle E" id="cE"><span>E</span><span class="flabel">enemy</span></div>
+    <div class="f-circle S" id="cS"><span>S</span><span class="flabel">siblings</span></div>
+  </div>
+
+  <div id="resultArea"></div>
+</div>
+
+<script>
+  const meanings = {
+    F: { word: 'Friends', emoji: '👫', desc: 'You two are great pals!' },
+    L: { word: 'Love', emoji: '❤️', desc: 'It\'s written in the stars!' },
+    A: { word: 'Affection', emoji: '🥰', desc: 'A warm, caring bond.' },
+    M: { word: 'Marriage', emoji: '💍', desc: 'Forever and always!' },
+    E: { word: 'Enemy', emoji: '⚡', desc: 'Opposites indeed!' },
+    S: { word: 'Siblings', emoji: '🤝', desc: 'Like family to each other.' }
+  };
+
+  function clean(name) {
+    return name.toLowerCase().replace(/[^a-z]/g, '');
+  }
+
+  function cancelCommon(a, b) {
+    let arr1 = a.split('');
+    let arr2 = b.split('');
+    let marked1 = new Array(arr1.length).fill(false);
+    let marked2 = new Array(arr2.length).fill(false);
+    for (let i = 0; i < arr1.length; i++) {
+      for (let j = 0; j < arr2.length; j++) {
+        if (!marked1[i] && !marked2[j] && arr1[i] === arr2[j]) {
+          marked1[i] = true;
+          marked2[j] = true;
+          break;
+        }
+      }
+    }
+    return { marked1, arr1, marked2, arr2 };
+  }
+
+  function renderLetters(containerId, arr, marked, original) {
+    const el = document.getElementById(containerId);
+    el.innerHTML = '';
+    let orig = original.split('');
+    let ai = 0;
+    for (let i = 0; i < orig.length; i++) {
+      const bub = document.createElement('div');
+      bub.className = 'letter-bubble';
+      bub.textContent = orig[i].toUpperCase();
+      if (/[a-zA-Z]/.test(orig[i])) {
+        bub.className += marked[ai] ? ' common' : ' unique';
+        ai++;
+      } else {
+        bub.className += ' unique';
+      }
+      el.appendChild(bub);
+    }
+  }
+
+  function flamesResult(count) {
+    const order = ['F','L','A','M','E','S'];
+    let remaining = [...order];
+    let idx = 0;
+    while (remaining.length > 1) {
+      idx = (idx + count - 1) % remaining.length;
+      remaining.splice(idx, 1);
+      if (idx >= remaining.length) idx = 0;
+    }
+    return remaining[0];
+  }
+
+  function startFlames() {
+    const raw1 = document.getElementById('name1').value.trim();
+    const raw2 = document.getElementById('name2').value.trim();
+    if (!raw1 || !raw2) {
+      document.getElementById('name1').focus();
+      return;
+    }
+
+    const a = clean(raw1), b = clean(raw2);
+    const { marked1, arr1, marked2, arr2 } = cancelCommon(a, b);
+    const remaining = marked1.filter(x => !x).length + marked2.filter(x => !x).length;
+
+    document.getElementById('lettersArea').style.display = 'block';
+    renderLetters('name1Letters', arr1, marked1, raw1);
+    renderLetters('name2Letters', arr2, marked2, raw2);
+
+    const countEl = document.getElementById('countDisplay');
+    countEl.innerHTML = `Remaining letters: <span>${remaining}</span>`;
+
+    const circles = ['F','L','A','M','E','S'];
+    circles.forEach(l => {
+      const el = document.getElementById('c'+l);
+      el.classList.remove('eliminated','winner');
+    });
+
+    const winner = flamesResult(remaining);
+
+    const order = ['F','L','A','M','E','S'];
+    let remaining2 = [...order];
+    let idx = 0;
+    let elimOrder = [];
+    while (remaining2.length > 1) {
+      idx = (idx + remaining - 1) % remaining2.length;
+      elimOrder.push(remaining2[idx]);
+      remaining2.splice(idx, 1);
+      if (idx >= remaining2.length) idx = 0;
+    }
+
+    let delay = 0;
+    elimOrder.forEach(l => {
+      setTimeout(() => {
+        document.getElementById('c'+l).classList.add('eliminated');
+      }, delay += 350);
+    });
+
+    setTimeout(() => {
+      document.getElementById('c'+winner).classList.add('winner');
+      showResult(winner);
+    }, delay + 400);
+  }
+
+  function showResult(key) {
+    const m = meanings[key];
+    const ra = document.getElementById('resultArea');
+    ra.innerHTML = `
+      <div class="result-box ${key}">
+        <div class="result-label">You are...</div>
+        <div class="result-word">${m.word}</div>
+        <div class="result-emoji">${m.emoji}</div>
+        <div style="font-size:13px;margin-top:6px;opacity:0.75;">${m.desc}</div>
+      </div>
+      <br/>
+      <button class="reset-btn" onclick="resetGame()">Try again</button>
+    `;
+  }
+
+  function resetGame() {
+    document.getElementById('name1').value = '';
+    document.getElementById('name2').value = '';
+    document.getElementById('lettersArea').style.display = 'none';
+    document.getElementById('resultArea').innerHTML = '';
+    ['F','L','A','M','E','S'].forEach(l => {
+      const el = document.getElementById('c'+l);
+      el.classList.remove('eliminated','winner');
+    });
+    document.getElementById('name1').focus();
+  }
+
+  document.getElementById('name2').addEventListener('keydown', e => {
+    if (e.key === 'Enter') startFlames();
+  });
+  document.getElementById('name1').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('name2').focus();
+  });
+</script>
