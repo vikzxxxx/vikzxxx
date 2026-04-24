@@ -1,0 +1,373 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .lc-wrap {
+    font-family: 'DM Sans', sans-serif;
+    min-height: 560px;
+    background: linear-gradient(135deg, #1a0a2e 0%, #2d1054 40%, #1a0a2e 100%);
+    border-radius: 20px;
+    padding: 40px 32px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stars {
+    position: absolute; inset: 0; pointer-events: none;
+  }
+  .star {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    opacity: 0;
+    animation: twinkle var(--d, 3s) ease-in-out infinite var(--delay, 0s);
+  }
+  @keyframes twinkle {
+    0%,100% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: var(--op, 0.8); transform: scale(1); }
+  }
+
+  .lc-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 34px;
+    font-weight: 400;
+    color: #f9d4f0;
+    text-align: center;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    position: relative;
+  }
+  .lc-title em { font-style: italic; color: #ff82c8; }
+
+  .lc-sub {
+    text-align: center;
+    font-size: 13px;
+    color: #b08fc4;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 36px;
+    position: relative;
+  }
+
+  .heart-deco {
+    display: flex; align-items: center; justify-content: center;
+    gap: 12px; margin-bottom: 32px; position: relative;
+  }
+  .heart-deco .line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, #b08fc4, transparent); }
+  .heart-icon { font-size: 20px; animation: pulse-heart 1.4s ease-in-out infinite; }
+  @keyframes pulse-heart {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.25); }
+  }
+
+  .input-group {
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .input-label {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #c4a6d9;
+    margin-bottom: 8px;
+    display: block;
+    font-weight: 500;
+  }
+  .lc-input {
+    width: 100%;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 14px;
+    padding: 14px 18px;
+    font-size: 17px;
+    font-family: 'Playfair Display', serif;
+    color: #f0d9fc;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .lc-input::placeholder { color: #7a5e90; font-style: italic; }
+  .lc-input:focus {
+    border-color: rgba(255,130,200,0.5);
+    background: rgba(255,255,255,0.11);
+  }
+
+  .plus-row {
+    display: flex; align-items: center; justify-content: center;
+    margin: 4px 0 20px; font-size: 22px; color: #ff82c8; opacity: 0.7;
+  }
+
+  .calc-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #c2185b, #880e4f);
+    border: none;
+    border-radius: 14px;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: #ffe4f3;
+    cursor: pointer;
+    letter-spacing: 0.4px;
+    transition: transform 0.15s, opacity 0.15s, box-shadow 0.15s;
+    margin-top: 4px;
+    box-shadow: 0 4px 24px rgba(194,24,91,0.35);
+    position: relative;
+  }
+  .calc-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(194,24,91,0.5); }
+  .calc-btn:active { transform: translateY(0); }
+
+  .result-area {
+    margin-top: 32px;
+    display: none;
+    animation: fadeUp 0.6s ease forwards;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-names {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: #f0d9fc;
+    margin-bottom: 20px;
+    letter-spacing: 0.3px;
+  }
+  .result-names span { color: #ff82c8; }
+
+  .heart-meter {
+    position: relative;
+    height: 22px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 100px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .heart-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #c2185b, #ff82c8, #ff4081);
+    border-radius: 100px;
+    width: 0%;
+    transition: width 1.4s cubic-bezier(0.23,1,0.32,1);
+    position: relative;
+  }
+  .heart-fill::after {
+    content: '';
+    position: absolute;
+    top: 3px; left: 6px; right: 6px; height: 6px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 100px;
+  }
+
+  .pct-display {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 64px;
+    font-weight: 700;
+    color: #ff82c8;
+    line-height: 1;
+    margin: 16px 0 8px;
+    text-shadow: 0 0 40px rgba(255,130,200,0.4);
+  }
+  .pct-sym { font-size: 36px; vertical-align: super; color: #f0d9fc; }
+
+  .verdict {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-style: italic;
+    color: #f9d4f0;
+    margin-bottom: 8px;
+  }
+  .verdict-desc {
+    text-align: center;
+    font-size: 13px;
+    color: #b08fc4;
+    line-height: 1.7;
+    max-width: 340px;
+    margin: 0 auto 20px;
+  }
+
+  .floating-hearts {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; overflow: hidden;
+  }
+  .fh {
+    position: absolute;
+    font-size: 20px;
+    animation: floatUp 3s ease-in forwards;
+    opacity: 0;
+  }
+  @keyframes floatUp {
+    0%   { opacity: 0; transform: translateY(0) scale(0.5); }
+    20%  { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-300px) scale(1.2); }
+  }
+
+  .reset-btn {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 28px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 100px;
+    color: #c4a6d9;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .reset-btn:hover { border-color: rgba(255,130,200,0.5); color: #ff82c8; }
+</style>
+
+<div class="lc-wrap" id="wrap">
+  <div class="stars" id="stars"></div>
+
+  <h2 class="sr-only">Love calculator — enter two names to find your compatibility percentage</h2>
+
+  <div class="lc-title">The <em>Love</em> Calculator</div>
+  <div class="lc-sub">✦ discover your compatibility ✦</div>
+
+  <div class="heart-deco">
+    <div class="line"></div>
+    <span class="heart-icon">♡</span>
+    <div class="line"></div>
+  </div>
+
+  <div class="input-group">
+    <label class="input-label" for="name1">Your name</label>
+    <input class="lc-input" id="name1" type="text" placeholder="Enter your name..." autocomplete="off" />
+  </div>
+
+  <div class="plus-row">+</div>
+
+  <div class="input-group">
+    <label class="input-label" for="name2">Their name</label>
+    <input class="lc-input" id="name2" type="text" placeholder="Enter their name..." autocomplete="off" />
+  </div>
+
+  <button class="calc-btn" id="calcBtn" onclick="calculate()">
+    ♥ Calculate Love ♥
+  </button>
+
+  <div class="result-area" id="resultArea">
+    <div class="result-names" id="resultNames"></div>
+    <div class="heart-meter"><div class="heart-fill" id="heartFill"></div></div>
+    <div class="pct-display" id="pctDisplay"><span class="pct-sym"></span></div>
+    <div class="verdict" id="verdict"></div>
+    <div class="verdict-desc" id="verdictDesc"></div>
+    <button class="reset-btn" onclick="resetCalc()">Try another pair</button>
+  </div>
+
+  <div class="floating-hearts" id="floatingHearts"></div>
+</div>
+
+<script>
+(function() {
+  // Generate stars
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 55; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.left = Math.random()*100+'%';
+    s.style.top = Math.random()*100+'%';
+    s.style.setProperty('--d', (2+Math.random()*4)+'s');
+    s.style.setProperty('--delay', (-Math.random()*4)+'s');
+    s.style.setProperty('--op', (0.4+Math.random()*0.6).toFixed(2));
+    starsEl.appendChild(s);
+  }
+
+  window.calculate = function() {
+    const n1 = document.getElementById('name1').value.trim();
+    const n2 = document.getElementById('name2').value.trim();
+    if (!n1 || !n2) {
+      const empty = !n1 ? 'name1' : 'name2';
+      document.getElementById(empty).focus();
+      return;
+    }
+
+    const pct = lovePct(n1, n2);
+    const { verdict, desc, emoji } = getVerdict(pct);
+
+    document.getElementById('resultNames').innerHTML =
+      `<span>${n1}</span> &amp; <span>${n2}</span>`;
+
+    const ra = document.getElementById('resultArea');
+    ra.style.display = 'block';
+
+    setTimeout(() => {
+      const fill = document.getElementById('heartFill');
+      fill.style.width = pct + '%';
+
+      let count = 0;
+      const interval = setInterval(() => {
+        if (count >= pct) { clearInterval(interval); }
+        document.getElementById('pctDisplay').innerHTML =
+          `${count}<span class="pct-sym">%</span>`;
+        count = Math.min(count + Math.ceil(pct / 40), pct);
+      }, 35);
+    }, 80);
+
+    document.getElementById('verdict').textContent = emoji + ' ' + verdict;
+    document.getElementById('verdictDesc').textContent = desc;
+
+    if (pct >= 70) spawnHearts();
+  };
+
+  function lovePct(a, b) {
+    const combined = (a + b).toUpperCase().replace(/\s/g,'');
+    let hash = 0;
+    for (let i = 0; i < combined.length; i++) {
+      hash = ((hash << 5) - hash + combined.charCodeAt(i)) | 0;
+    }
+    const raw = Math.abs(hash) % 100;
+    return raw < 10 ? raw + 10 : raw;
+  }
+
+  function getVerdict(pct) {
+    if (pct >= 90) return { verdict: 'Soulmates', emoji: '💞', desc: 'The stars have aligned perfectly for you two. This is a rare and magical connection — cherish it with all your heart.' };
+    if (pct >= 75) return { verdict: 'Deeply in Love', emoji: '❤️', desc: 'Your hearts beat in beautiful harmony. You share a wonderful bond that's hard to find in a lifetime.' };
+    if (pct >= 60) return { verdict: 'Great Match', emoji: '💕', desc: 'You two complement each other wonderfully. There's real warmth and understanding between you.' };
+    if (pct >= 45) return { verdict: 'Promising Sparks', emoji: '✨', desc: 'There's a sweet connection here. With a little nurturing, something beautiful could blossom.' };
+    if (pct >= 30) return { verdict: 'Complicated Hearts', emoji: '💫', desc: 'Love isn't always simple — sometimes the most interesting stories begin in unexpected places.' };
+    return { verdict: 'Opposites Attract?', emoji: '🌙', desc: 'They say opposites attract! Maybe the universe has a surprising twist in store for you both.' };
+  }
+
+  function spawnHearts() {
+    const container = document.getElementById('floatingHearts');
+    const hearts = ['♥','♡','💕','💖','💗'];
+    for (let i = 0; i < 18; i++) {
+      const h = document.createElement('span');
+      h.className = 'fh';
+      h.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+      h.style.left = (10 + Math.random()*80) + '%';
+      h.style.bottom = '40px';
+      h.style.animationDelay = (Math.random()*1.5)+'s';
+      h.style.fontSize = (14+Math.random()*18)+'px';
+      h.style.color = ['#ff82c8','#ff4081','#f48fb1','#fce4ec','#ff80ab'][Math.floor(Math.random()*5)];
+      container.appendChild(h);
+      setTimeout(() => h.remove(), 4000);
+    }
+  }
+
+  window.resetCalc = function() {
+    document.getElementById('name1').value = '';
+    document.getElementById('name2').value = '';
+    document.getElementById('resultArea').style.display = 'none';
+    document.getElementById('heartFill').style.width = '0%';
+    document.getElementById('name1').focus();
+  };
+
+  document.getElementById('name2').addEventListener('keydown', e => {
+    if (e.key === 'Enter') calculate();
+  });
+  document.getElementById('name1').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('name2').focus();
+  });
+})();
+</script>
